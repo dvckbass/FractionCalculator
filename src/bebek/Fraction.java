@@ -26,16 +26,19 @@ public class Fraction {
 		this.den = 1;
 	}
 
-	public int getnum() {
+	public int getNum() {
 		return num;
 	}
 
-	public int getden() {
+	public int getDen() {
 		return den;
 	}
 
 	@Override
 	public String toString() {
+		if(den == 1) {
+			return Integer.toString(num);
+		}
 		return num + "/" + den;
 	}
 
@@ -45,7 +48,7 @@ public class Fraction {
 
 	public Fraction add(Fraction other) {
 		//result of new numerator
-		int numRes = (this.num * other.den) + (other.num * other.den);
+		int numRes = (this.num * other.den) + (other.num * this.den);
 		//result of new denominator
 		int denRes = this.den * other.den;
 		return new Fraction(numRes, denRes);
@@ -53,13 +56,14 @@ public class Fraction {
 
 	public Fraction substract(Fraction other) {
 		//result of new numerator
-		int numRes = (this.num * other.den) - (other.num * other.den);
+		int numRes = (this.num * other.den) - (other.num * this.den);
 		//result of new denominator
 		int denRes = this.den * other.den;
 		return new Fraction(numRes, denRes);
 	}
 
 	public Fraction multiply(Fraction other) {
+
 		//result of new numerator
 		int numRes = this.num * other.num;
 		//result of new denominator
@@ -90,20 +94,26 @@ public class Fraction {
 	}
 
 	public void toLowestTerms() {
-		int gcd = gcd(this.num, this.den);
-		this.num /= gcd;
-		this.den /= gcd;
+		if(num == den) {
+			num = 1;
+			den = 1;
+		} else {
+			int gcd = gcd(this.num, this.den);
+			this.num /= gcd;
+			this.den /= gcd;
+		}
+
 	}
 
 	//find greatest common divisor
 	public static int gcd(int num, int den) {
-		int tmp = 0;
+		int tmp = 1;
 		while(num != 0 && den != 0) {
 			tmp = num % den;
 			num = den;
 			den = tmp;
 		}
-		return tmp;
+		return num;
 	}
 
 }
