@@ -3,6 +3,8 @@ package bebek;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.apache.commons.lang.StringUtils;
+
 public class FractionCalculator {
 	static ArrayList<Character> validOperation = new ArrayList<>();
 	private char op;
@@ -44,8 +46,13 @@ public class FractionCalculator {
 
 	}
 
+	
 	public Fraction getFraction(Scanner input) {
 
 	}
 	*/
+	
+	private boolean isNumber(String s) {
+		return StringUtils.isNumeric(s);
+	}
 }
