@@ -9,6 +9,7 @@ public class FractionCalculator {
 	static ArrayList<Character> validOperation = new ArrayList<>();
 	private static char op;
 	private String fraction;
+	private static boolean equal;
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
@@ -16,7 +17,7 @@ public class FractionCalculator {
 		FractionCalculator calc = new FractionCalculator();
 		Fraction frac1;
 		Fraction frac2;
-		Fraction result = new Fraction();
+		Fraction result = null;
 
 		validOperation.add('+');
 		validOperation.add('-');
@@ -31,6 +32,7 @@ public class FractionCalculator {
 		System.out.println("--------------------------------------------------------------------------");
 		
 		
+		
 		do {
 			System.out.print("Please enter an operation (+,-,/,*, = or Q to quit): ");
 			System.out.print(calc.getOperation(input));
@@ -41,8 +43,26 @@ public class FractionCalculator {
 			case '+':
 				result = frac1.add(frac2);
 				break;
+			case '-':
+				result = frac1.substract(frac2);
+				break;
+			case '/':
+				result = frac1.divide(frac2);
+				break;
+			case '*':
+				result = frac1.multiply(frac2);
+				break;
+			case '=':
+				equal = frac1.equals(frac2);
+				break;
 			}
-			System.out.println(frac1.toString() + " " + op + " " + frac2.toString() + " = " + result.toString());
+			if(result != null) {
+				result.toLowestTerms();
+				System.out.println(frac1.toString() + " " + op + " " + frac2.toString() + " = " + result.toString());
+			} else {
+				System.out.println(frac1.toString() + " " + op + " " + frac2.toString() + " is " + equal);
+			}
+			
 			System.out.println("--------------------------------------------------------------------------");
 		} while(Character.toUpperCase(op) != 'Q');
 		
@@ -65,7 +85,7 @@ public class FractionCalculator {
 	public Fraction getFraction(Scanner input) {
 		String[] tmp;
 		int num = 0;
-		int den = 0;
+		int den = 1;
 		this.fraction = input.next();
 		if (validFraction(this.fraction)) {
 			if (this.fraction.contains("/")) {
@@ -73,6 +93,7 @@ public class FractionCalculator {
 				num = Integer.parseInt(tmp[0]);
 				den = Integer.parseInt(tmp[1]);
 			} else {
+				num = Integer.parseInt(this.fraction);
 				return new Fraction(num);
 			}
 		}
