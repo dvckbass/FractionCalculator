@@ -22,16 +22,21 @@ public class FractionCalculator {
 		System.out.println("It will add, subtract, multiply and divide fractions until you type Q to quit.");
 		System.out.println("Please enter your fractions in the form a/b, where a and b are integers.");
 		System.out.println("--------------------------------------------------------------------------");
-		System.out.print("Please enter an operation (+,-,/,*, = or Q to quit: ");
-		calc.getOperation(input);
+		System.out.print("Please enter an operation (+,-,/,*, = or Q to quit): ");
+		System.out.println(calc.getOperation(input));
 		input.close();
 	}
 
 	public String getOperation(Scanner input) {
-		while(!(validOperation.contains(input.next().charAt(0)))) {
-			return "Invalid fraction. Please enter (a/b) or (a), where a and b are integers and b is not zero:";
+		this.op = input.next().charAt(0);
+		while(!(validOperation.contains(this.op))) {
+			if(Character.toUpperCase(this.op) == 'Q') {
+				System.exit(0);
+			}
+			System.out.print("Invalid input (+, -, /, *, = or Q to quit): ");
+			this.op = input.next().charAt(0);
 		}
-		return "_";
+		return "Please enter a fraction(a/b) or integer(a):";
 	}
 
 	/*
