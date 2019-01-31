@@ -18,6 +18,7 @@ public class FractionCalculator {
 		Fraction frac1;
 		Fraction frac2;
 		Fraction result = null;
+		boolean divideByZero = false;
 
 		validOperation.add('+');
 		validOperation.add('-');
@@ -47,7 +48,12 @@ public class FractionCalculator {
 				result = frac1.substract(frac2);
 				break;
 			case '/':
-				result = frac1.divide(frac2);
+				if(frac2.getNum() == 0) {
+					divideByZero = true;
+					System.out.println(frac1.toString() + " / 0 = undefined");
+				} else {
+					result = frac1.divide(frac2);
+				}
 				break;
 			case '*':
 				result = frac1.multiply(frac2);
@@ -56,13 +62,14 @@ public class FractionCalculator {
 				equal = frac1.equals(frac2);
 				break;
 			}
-			if(result != null) {
-				result.toLowestTerms();
-				System.out.println(frac1.toString() + " " + op + " " + frac2.toString() + " = " + result.toString());
-			} else {
-				System.out.println(frac1.toString() + " " + op + " " + frac2.toString() + " is " + equal);
+			if(!divideByZero) {
+				if(result != null) {
+					result.toLowestTerms();
+					System.out.println(frac1.toString() + " " + op + " " + frac2.toString() + " = " + result.toString());
+				} else {
+					System.out.println(frac1.toString() + " " + op + " " + frac2.toString() + " is " + equal);
+				}
 			}
-			
 			System.out.println("--------------------------------------------------------------------------");
 		} while(Character.toUpperCase(op) != 'Q');
 		
@@ -71,14 +78,19 @@ public class FractionCalculator {
 	}
 
 	public String getOperation(Scanner input) {
-		this.op = input.next().charAt(0);
-		while (!(validOperation.contains(this.op))) {
+		String inputString = input.nextLine();
+		this.op = inputString.charAt(0);
+		while ((!(validOperation.contains(this.op))) || inputString.length() > 1  ) {
 			if (Character.toUpperCase(this.op) == 'Q') {
 				System.exit(0);
 			}
+			
+			
 			System.out.print("Invalid input (+, -, /, *, = or Q to quit): ");
-			this.op = input.next().charAt(0);
+			inputString = input.nextLine();
+			this.op = inputString.charAt(0);
 		}
+		
 		return "Please enter a fraction(a/b) or integer(a): ";
 	}
 
@@ -86,7 +98,7 @@ public class FractionCalculator {
 		String[] tmp;
 		int num = 0;
 		int den = 1;
-		this.fraction = input.next();
+		this.fraction = input.nextLine();
 		if (validFraction(this.fraction)) {
 			if (this.fraction.contains("/")) {
 				tmp = this.fraction.split("/");
@@ -102,8 +114,8 @@ public class FractionCalculator {
 		}
 		while (!(this.validFraction(this.fraction))) {
 			System.out.print(
-					"Invalid fraction. Please enter (a/b) or (a), " + "where a and b are integers and b is not zero");
-			this.fraction = input.next();
+					"Invalid fraction. Please enter (a/b) or (a), " + "where a and b are integers and b is not zero: ");
+			this.fraction = input.nextLine();
 		}
 		return new Fraction(num, den);
 
@@ -127,7 +139,7 @@ public class FractionCalculator {
 			tmp = sb.toString().split("/");
 			num = tmp[0];
 			den = tmp[1];
-			if (!(Integer.parseInt(den) == 0)) {
+			if(isNumber(num) && isNumber(den) && (!(Integer.parseInt(den) == 0))) {
 				valid = true;
 			}
 
